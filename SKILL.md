@@ -2,12 +2,12 @@
 name: bug-reaper
 license: MIT
 metadata:
-  version: 0.0.3
+  version: 0.0.4
   title: BugReaper
   author: shaniidev
   homepage: https://github.com/shaniidev/bug-reaper
   source: https://github.com/shaniidev/bug-reaper
-description: "Professional Web2 bug bounty hunting agent — super accurate, evidence-based vulnerability finder and report writer. Use when: (1) auditing a web app or API for bug bounty programs (HackerOne, Bugcrowd, Intigriti, YesWeHack), (2) hunting specific vulnerability classes (XSS, SQLi, NoSQLi, SSRF, IDOR, auth bypass, business logic, RCE, SSTI, LFI, XXE, CORS, CSRF, open redirect, prototype pollution, subdomain takeover, HTTP request smuggling, API/GraphQL bugs), (3) triaging findings to eliminate false positives, (4) validating exploitability, (5) chaining low-severity bugs into critical findings, (6) writing platform-specific vulnerability reports, (7) user says 'pentest', 'find bugs', 'hack this', 'security audit', 'bug bounty', 'look for vulnerabilities', 'check for CORS', 'subdomain takeover', 'prototype pollution', 'request smuggling', 'nosql injection', 'mongodb injection', or names a program/target. Reports only real, demonstrable, medium+ severity bugs that would pass real triage."
+description: "Web2 bug bounty hunting agent — evidence-based vulnerability finder and report writer. Use when: auditing web apps/APIs for HackerOne, Bugcrowd, Intigriti, YesWeHack; hunting XSS, SQLi, NoSQLi, SSRF, IDOR, auth bypass, RCE, SSTI, LFI, XXE, CORS, CSRF, prototype pollution, subdomain takeover, HTTP smuggling, open redirect, API/GraphQL bugs; auditing locally downloaded GitHub repos or source code (white-box/source code review); writing platform-specific reports. Trigger on: 'pentest', 'find bugs', 'security audit', 'bug bounty', 'find vulnerabilities', 'source code review', 'audit this repo', 'review repo', 'white-box', 'local repo', vulnerability class names, or program/target names. Reports only real, confirmed medium+ severity bugs that pass real triage."
 ---
 
 # Web2 Bug Bounty Agent
@@ -29,11 +29,28 @@ Understand the target before hunting. Read **`references/recon.md`** for the ful
 
 > **WARNING — Authorization required.** Only proceed against targets covered by an active bug bounty program scope or with explicit written permission. Ask the user to confirm the target is in scope before any recon step.
 
+> **Scope corner cases:** `*.target.com` wildcard typically excludes the apex `target.com` itself. Nested subdomains (`sub.app.target.com`) ARE included unless explicitly excluded. Always verify with the program rules before testing anything.
+
+**Source Code Mode:** If the user has a locally downloaded GitHub repo or source code:
+- Switch to `references/source-code-audit.md` for the full white-box methodology
+- Source code auditing supplements or replaces black-box recon — use both when possible
+- Trigger: user says "review repo", "audit source code", "check this codebase", "downloaded github", or provides a local folder path
+
 1. Read the program scope file (if provided). Ask the user to run `scripts/analyze_scope.py` on it, or parse scope manually from the file.
 2. Passive subdomain enum → tech fingerprinting → JS bundle mining → endpoint discovery
 3. Identify: framework, language, auth mechanism, API type (REST/GraphQL), WAF
 4. Note any excluded vuln classes from scope rules
 5. Output a brief attack surface map before proceeding to Phase 2
+
+### Quick Wins — Run These First on Any Target
+
+Before going deep on any single vuln class, spend 10 minutes on these — they yield confirmed findings faster than anything else:
+
+1. **Second-account IDOR test:** Create two accounts. For every `GET /api/*/[id]` endpoint, swap the resource ID from Account A while authenticated as Account B. If data returns — instant High.
+2. **Password reset token reuse:** Request a reset link, use it, then use it again. If valid twice — Critical auth bypass.
+3. **`role` / `admin` / `isAdmin` in API responses:** If returned in your own profile API, try adding it to a PUT/PATCH request. Mass assignment → privilege escalation.
+4. **Dev/staging environment check:** If `staging.target.com` or `dev.target.com` resolves, test it in parallel — same codebase, often fewer controls.
+5. **GraphQL introspection:** `{ __schema { types { name fields { name } } } }` — if open, you have the full API schema including undocumented endpoints.
 
 ### Phase 2 — AUDIT
 Hunt systematically, one vuln class at a time. Ordered by bounty ROI — start at top. Read the relevant reference file:
@@ -127,6 +144,7 @@ Recommended Fix:
 
 | Need | File |
 |---|---|
+| **Source Code Audit** (white-box, local repo) | `references/source-code-audit.md` |
 | **Recon** — subdomain enum, JS mining, surface map | `references/recon.md` |
 | **Severity scoring** — assign CVSS, map to platform tiers | `references/severity-guide.md` |
 | **Vulnerability chaining** — escalate P3→P1 | `references/chaining.md` |
