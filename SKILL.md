@@ -1,10 +1,12 @@
 ---
 name: bug-reaper
+license: MIT
 metadata:
-  version: 0.0.1
+  version: 0.0.2
   title: BugReaper
-  author: github.com/shaniidev
-  license: MIT
+  author: shaniidev
+  homepage: https://github.com/shaniidev/bug-reaper
+  source: https://github.com/shaniidev/bug-reaper
 description: "Professional Web2 bug bounty hunting agent — super accurate, evidence-based vulnerability finder and report writer. Use when: (1) auditing a web app or API for bug bounty programs (HackerOne, Bugcrowd, Intigriti, YesWeHack), (2) hunting specific vulnerability classes (XSS, SQLi, NoSQLi, SSRF, IDOR, auth bypass, business logic, RCE, SSTI, LFI, XXE, CORS, CSRF, open redirect, prototype pollution, subdomain takeover, HTTP request smuggling, API/GraphQL bugs), (3) triaging findings to eliminate false positives, (4) validating exploitability, (5) chaining low-severity bugs into critical findings, (6) writing platform-specific vulnerability reports, (7) user says 'pentest', 'find bugs', 'hack this', 'security audit', 'bug bounty', 'look for vulnerabilities', 'check for CORS', 'subdomain takeover', 'prototype pollution', 'request smuggling', 'nosql injection', 'mongodb injection', or names a program/target. Reports only real, demonstrable, medium+ severity bugs that would pass real triage."
 ---
 
@@ -25,7 +27,9 @@ Every finding MUST have: ① attacker-controlled input ② reaching a dangerous 
 ### Phase 1 — RECON
 Understand the target before hunting. Read **`references/recon.md`** for the full 7-step methodology.
 
-1. Read the program scope file (if provided). Run `scripts/analyze_scope.py` on it.
+> **WARNING — Authorization required.** Only proceed against targets covered by an active bug bounty program scope or with explicit written permission. Ask the user to confirm the target is in scope before any recon step.
+
+1. Read the program scope file (if provided). Ask the user to run `scripts/analyze_scope.py` on it, or parse scope manually from the file.
 2. Passive subdomain enum → tech fingerprinting → JS bundle mining → endpoint discovery
 3. Identify: framework, language, auth mechanism, API type (REST/GraphQL), WAF
 4. Note any excluded vuln classes from scope rules
@@ -81,7 +85,7 @@ Select the target platform and generate the report. Read the platform file first
 | Intigriti | `references/platforms/intigriti.md` |
 | YesWeHack | `references/platforms/yeswehack.md` |
 
-To auto-generate a markdown report, run:
+To auto-generate a markdown report, ask the user to run:
 ```
 python scripts/generate_report.py --platform <platform> --vuln-type <type> --input findings.json
 ```
@@ -110,9 +114,11 @@ Recommended Fix:
 
 ## Hard Rules
 
+- **NEVER execute scripts or commands autonomously.** All scripts (`analyze_scope.py`, `generate_report.py`) and all payloads/requests must be suggested to the USER to run in their own environment.
 - **DO NOT REPORT:** missing headers, clickjacking without PoC, rate limiting without bypass, version CVEs without confirmed applicability, self-XSS, CSRF on forms with no sensitive action
 - **WAIT for user execution output** before upgrading from Theoretical to Confirmed
 - **One finding at a time** when asking user to verify — don't flood
+- **Authorization gate:** If the user has not confirmed the target is in scope, do not proceed with recon or payloads. Ask first.
 - If no valid vulnerability passes all filters: explicitly state **"No reportable vulnerabilities identified."**
 
 ---
