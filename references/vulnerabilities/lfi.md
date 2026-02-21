@@ -77,10 +77,10 @@ send_file('uploads/' + filename)
 ## LFI → RCE Escalation (PHP)
 
 **Log Poisoning:**
-1. Send a request with PHP payload in User-Agent:
-   - `<?php system($_GET['cmd']); ?>`
+1. Send a request with a PHP code execution payload in the User-Agent header — a one-liner that passes a GET parameter to an OS command function (e.g., `system()`, `passthru()`, or `shell_exec()`). Exact payload syntax: see HackTricks "LFI Log Poisoning" or PayloadsAllTheThings.
 2. Include the Apache/Nginx access log via LFI:
    - `?page=../../../../var/log/apache2/access.log`
+   - Alternative: `/proc/self/fd/[0-20]` — iterate fd numbers to find open log file descriptors without knowing the exact path
 3. If log is displayed/included → RCE via `?page=...&cmd=id`
 
 **Session File Poisoning:**
@@ -89,9 +89,10 @@ send_file('uploads/' + filename)
 3. Include session file: `?page=../../../../tmp/sess_<sessionid>`
 
 **PHP Wrappers (if `allow_url_fopen` or `allow_url_include`):**
-- `php://input` — POST data as include source
-- `data://text/plain,<?php system('id'); ?>` — inline code execution
+- `php://input` — POST data as include source (POST body is treated as PHP and executed)
+- `data://text/plain,[php-payload]` — inline execution via data URI; the payload runs as PHP code (requires `allow_url_include=On`). Exact syntax: HackTricks "LFI PHP Wrappers"
 - `expect://id` — if `expect` wrapper enabled (rare)
+- **PHP Filter Chain RCE (modern, no log access needed):** Chain PHP filters via `php://filter/convert.iconv.UTF8.CSISO2022KR|...` to construct arbitrary strings that get executed. This works even without write access to any file. Tool: `php_filter_chain_generator` on GitHub — generates the full chain payload from a target command.
 
 ---
 
