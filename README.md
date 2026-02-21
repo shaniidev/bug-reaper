@@ -3,7 +3,7 @@
 > Structured web2 bug bounty AI skill — 18 vulnerability classes, 4 bug bounty platforms, zero AI slop. Compatible with OpenClaw, Cursor, Claude Code, Antigravity, and Windsurf.
 
 [![Stars](https://img.shields.io/github/stars/shaniidev/bug-reaper?style=flat&logo=github&logoColor=white&color=gold&label=Stars)](https://github.com/shaniidev/bug-reaper/stargazers)
-[![Version](https://img.shields.io/badge/v0.0.4-blue?logo=semanticrelease&logoColor=white)](https://github.com/shaniidev/bug-reaper/releases)
+[![Version](https://img.shields.io/badge/v0.0.5-blue?logo=semanticrelease&logoColor=white)](https://github.com/shaniidev/bug-reaper/releases)
 [![License](https://img.shields.io/badge/MIT-green?logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/Agent_Skills-standard-orange)](https://agentskills.io)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-supported-brightgreen)](https://clawhub.ai/shaniidev/bug-reaper)

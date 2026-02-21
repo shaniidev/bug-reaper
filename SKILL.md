@@ -2,7 +2,7 @@
 name: bug-reaper
 license: MIT
 metadata:
-  version: 0.0.4
+  version: 0.0.5
   title: BugReaper
   author: shaniidev
   homepage: https://github.com/shaniidev/bug-reaper

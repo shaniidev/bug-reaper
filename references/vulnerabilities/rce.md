@@ -27,8 +27,8 @@
 os.system(f"ping {user_input}")
 subprocess.run(f"convert {filename}", shell=True)
 
-# PHP — vulnerable
-system("nmap " . $_GET['host']);
+# PHP — vulnerable: user-controlled parameter concatenated into OS command function
+# Exact sink names: exec(), passthru(), shell_exec() — see PayloadsAllTheThings RCE
 exec("whois " . $ip);
 
 # Node.js — vulnerable

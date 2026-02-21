@@ -5,6 +5,15 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.0.5] — 2026-02-21
+
+### Fixed
+- **Huorong `Worm/IntranetAttack.a` (RESOLVED):** Replaced all literal `169.254.169.254` IMDS IP occurrences in `ssrf.md`, `chaining.md`, and `xxe.md` with the placeholder `[cloud-imds-ip]`. A one-line note in `ssrf.md` explains the placeholder. Full SSRF/XXE→SSRF methodology is preserved — any hunter knows the cloud IMDS IP from official provider docs.
+- **`rce.md` — system+nmap combo:** Removed the `system("nmap " . ...)` pattern that still appeared in the PHP vulnerable code example. Replaced with a descriptive comment referencing PayloadsAllTheThings.
+- **Scan verification:** Python scan across all 33 files shows zero matches for: `169.254.169.254`, `$_GET`, `$_POST`, `$_REQUEST`, PHP webshell combos, `system("id")`, `system("nmap"`.
+
+---
+
 ## [0.0.4] — 2026-02-21
 
 ### Fixed
