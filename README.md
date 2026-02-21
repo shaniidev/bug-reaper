@@ -2,13 +2,15 @@
 
 > Structured web2 bug bounty AI skill — 18 vulnerability classes, 4 bug bounty platforms, zero AI slop. Compatible with OpenClaw, Cursor, Claude Code, Antigravity, and Windsurf.
 
-[![Version](https://img.shields.io/badge/version-0.0.3-blue)](https://github.com/shaniidev/bug-reaper/releases)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/shaniidev/bug-reaper?style=flat&logo=github&logoColor=white&color=gold&label=Stars)](https://github.com/shaniidev/bug-reaper/stargazers)
+[![Version](https://img.shields.io/badge/v0.0.3-blue?logo=semanticrelease&logoColor=white)](https://github.com/shaniidev/bug-reaper/releases)
+[![License](https://img.shields.io/badge/MIT-green?logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/Agent_Skills-standard-orange)](https://agentskills.io)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-supported-brightgreen)](https://clawhub.ai/shaniidev/bug-reaper)
-[![Cursor](https://img.shields.io/badge/Cursor-supported-blue)](https://cursor.com)
-[![Claude Code](https://img.shields.io/badge/Claude_Code-supported-purple)](https://claude.ai)
-[![Antigravity](https://img.shields.io/badge/Antigravity-supported-red)](https://antigravity.google)
+[![Cursor](https://img.shields.io/badge/Cursor-supported-1C1C1C?logo=cursor&logoColor=white)](https://cursor.com)
+[![Claude Code](https://img.shields.io/badge/Claude_Code-supported-7B2DB0?logo=anthropic&logoColor=white)](https://claude.ai/code)
+[![Antigravity](https://img.shields.io/badge/Antigravity-supported-4285F4?logo=google&logoColor=white)](https://antigravity.google)
+[![Windsurf](https://img.shields.io/badge/Windsurf-supported-09B6A2?logo=codeium&logoColor=white)](https://codeium.com/windsurf)
 
 BugReaper is an [Agent Skill](https://agentskills.io) that turns any compatible AI agent into a disciplined web2 bug bounty hunter. It enforces evidence-based validation, simulates real triage for HackerOne, Bugcrowd, Intigriti, and YesWeHack, and chains low-severity bugs into critical findings. Every finding requires a working PoC before it gets reported.
 
